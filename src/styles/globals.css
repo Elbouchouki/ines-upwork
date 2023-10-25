@@ -1,0 +1,255 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+ 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+ 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+.fc::before {
+  margin-left: 1rem;
+}
+
+.fc::before {
+  content: "";
+  display: inline-block;
+  width: 8rem;
+  height: 2rem;
+  background-image: url(/fc_logo.png);
+  background-size: 8rem;
+  margin-top: .5rem;
+}
+
+.fc:hover::before {
+  background-position-y: 32px;
+}
+
+
+.fc-header-view {
+  height: 3rem;
+  width: 100%;
+  background-color: #0f0f0f;
+  color: #a2a2a2;
+}
+
+.fc {
+  float: left;
+  height: 3rem;
+  font-size: 0;
+}
+
+
+.eaSports::before {
+  margin-left: .5rem;
+}
+
+.eaSports:hover::before {
+  background-position-y: 1rem;
+}
+
+.eaSports::before {
+  content: "";
+  display: block;
+  width: 6rem;
+  height: 1rem;
+  background-image: url(/easports.png);
+  background-size: 6rem;
+  margin-top: .9rem;
+}
+
+
+.eaSports {
+  float: right;
+  height: 3rem;
+  width: 8rem;
+}
+
+.ut-content {
+  background-image:url(/login.png);
+  background-position:center;
+  background-size:contain;
+  background-repeat:no-repeat;
+  align-items:center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  box-shadow: 0 1rem 3em rgba(0,0,0,.4);
+  background-color: rgba(0,0,0,.6);
+  border-radius: 20px;
+  max-height: 85%;
+}
+
+
+.ut-login-content {
+  box-sizing: border-box;
+  margin-right: 4rem;
+  width: 37%;
+  text-align: center;
+}
+
+.ut-fut-logo{
+  padding: 0 0 2rem;
+  direction: ltr;
+  text-align: center;
+  height: auto;
+  color: #fcfcf7;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: UltimateTeam,sans-serif;
+  font-size: 100%;
+}
+
+.fut-logo{
+  width: 65%;
+  height: auto;
+  text-align: center;
+  vertical-align: middle;
+  color: #fcfcf7;
+  font-family: UltimateTeam,sans-serif;
+  font-size: 100%;
+}
+
+.flat {
+  text-decoration:underline
+}
+
+.alt {
+  color:#fcfcf7
+}
+
+@media (min-width: 768px) {
+  .ut-content {
+    background-clip: padding-box;
+    box-shadow: 0 1rem 3em rgba(0,0,0,.4);
+    max-height: 85%;
+    max-width: 1200px;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+
+@media (min-width: 1281px) {
+   .ut-content {
+    background-clip: padding-box;
+    box-shadow: 0 1rem 3em rgba(0,0,0,.4);
+    max-height: 85%;
+    max-width: 1200px;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.btn-standard {
+  background-color: #787873;
+  color: #fcfcf7;
+  height: 2.8rem;
+  line-height: 2.8rem;
+  box-sizing: border-box;
+  border-radius: 1.5rem;
+  display: block;
+  font-family: UltimateTeam,sans-serif;
+  font-size: 1.3em;
+  overflow: hidden;
+  padding: 0 1rem;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+  background-color: #fcfcf7;
+  color: #151616;
+  border: none;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-standard:hover{
+  background-color: #deded8;
+}
+
+
+
+@font-face {
+  font-family: UltimateTeam;
+  src: url(/CruyffSans-Regular.woff);
+}
+
+*{
+  font-family: UltimateTeam,sans-serif;
+}
