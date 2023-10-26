@@ -41,7 +41,7 @@ const LoginPage = () => {
   }
 
   const resendVerificationCode = () => {
-
+    console.log("resendVerificationCode")
   }
 
   return (

@@ -32,7 +32,7 @@ const LoginPage = () => {
   })
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    let password = form.getValues("password")
+    const password = form.getValues("password")
     if (!password || password === "") {
       form.setError("password", {
         type: "manual",

@@ -37,7 +37,7 @@ const LoginPage = () => {
           </p>
         </div>
         <p className='text-white w-full text-center'>
-          We'll send a verification code to {em}.
+          We&apos;ll send a verification code to {em}.
         </p>
         <Link href={`/login/2fa/code?email=${email}`} className='w-full flex flex-col'>
           <Button type='button' className="otkbtn otkbtn-primary fontElectronics mt-4 font-semibold">
