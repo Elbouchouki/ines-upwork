@@ -11,95 +11,125 @@ import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-
+import { PasswordInput } from '@/components/ui/password-input';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  email: z.string().min(10,{
-    message: "Username must be at least 2 characters.",
-  }).max(50),
-  password:z.string().min(10).max(50)
+  email: z.string({
+    required_error: "Email address is invalid"
+  }).email("Email address is invalid"),
+  password: z.string().optional(),
 })
 
 const LoginPage = () => {
-  
-  const form = useForm<z.infer<typeof formSchema>>()
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    // mode: "onBlur",
+  })
   function onSubmit(values: z.infer<typeof formSchema>) {
+
+    let password = form.getValues("password")
+    if (!password || password === "") {
+      form.setError("password", {
+        type: "manual",
+        message: "Password is required"
+      })
+      return
+    }
     console.log(values)
+    router.push(`/login/2fa?email=${values.email}`)
   }
+
+
+
+  const router = useRouter()
+
   return (
     <div
-    className='custum-bg-dark h-screen'
+      className='bg-[#1d2033] w-screen h-screen p-5'
     >
-      <div className='myBox mx-auto w-3/12'>
-        <div className="share-section pt-10 flex flex-col gap-y-6 items-center">
+      <div className='myBox mx-auto max-w-sm flex flex-col gap-6'>
+        <div className=" pt-10 flex flex-col gap-y-6 items-center">
           <Image
-          alt="" src="/EALogo-New.svg" width={65} height={65}/>
-          <p className="font-bold text-2xl text-white fontElectronics tracking-wide">
+            alt="" src="/EALogo-New.svg" width={65} height={65} />
+          <p className="font-medium text-2xl text-white fontElectronics tracking-wide text-center">
             Sign in to your EA Account
           </p>
-          <div className="my-4 social-login-logos">
-              <Icon color="bg-white" src="/icons/google.svg"/>
-              <Icon color="bg-blue-600" src="/icons/facebook.svg"/>
-              <Icon color="bg-white" src="/icons/apple.svg"/>
-              <Icon color="bg-black" src="/icons/steam.svg"/>
-              <Icon color="bg-[#107c10]" src="/icons/xbox.svg"/>
-              <Icon color="bg-[#0049a0]" src="/icons/psn.svg"/>
-          </div>
-          <div className="relative flex items-center justify-center bg-[#3a3c4c] h-0.5 w-full">
-              <p className="absolute custum-bg-dark
-                text-[#908e97] 
-                text-sm p-2 font-bold font-sans">or</p>
-          </div>
         </div>
-        <div className="share-section ">
-        <Form {...form}>
-            <form 
-            onSubmit={()=>
-              form.handleSubmit(onSubmit)
-            } 
-            className="space-y-8">
+
+        <div className="">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-4">
+
               <FormField
                 control={form.control}
                 name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>PHONE OR EMAIL</FormLabel>
+                render={({ field, fieldState }) => (
+                  <FormItem className='flex flex-col gap-0.5 '>
+                    <FormLabel >PHONE OR EMAIL</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your phone or email" {...field} />
+                      <Input className={cn({
+                        "border-red-600 hover:border-red-600": fieldState.error,
+                      })} placeholder="Enter your phone or email" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className='' />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="password"
-                render={({ field }) => (
-                  <FormItem>
+                render={({ field, fieldState }) => (
+                  <FormItem className='flex flex-col gap-0.5 '>
                     <FormLabel>PASSWORD</FormLabel>
                     <FormControl>
-                      <Input 
-                      placeholder="Enter your password" {...field} />
+                      <PasswordInput
+                        className={cn({
+                          "border-red-600 hover:border-red-600": fieldState.error,
+                        })}
+                        onFocus={() => {
+                          form.resetField("password")
+                        }}
+                        placeholder="Enter your password" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    {
+                      fieldState.error && fieldState.error.type === "manual" &&
+                      <div className='text-sm font-medium text-destructive tracking-wide'>
+                        Your credentials are incorrect or have expired. Please try again or{" "}
+                        <Link className='hover:underline text-blue-400' href="https://signin.ea.com/p/juno/resetPassword?fid=RlMwOjMuMDoyLjA6d0xYZVFFVzRMUERYWnExaWg2NGQ2WFVCOnF2cWE0&initref=https%3A%2F%2Faccounts.ea.com%3A443%2Fconnect%2Fauth%3Fhide_create%3Dtrue%26display%3Dweb2%252Flogin%26scope%3Dbasic.identity%2Boffline%2Bsignin%2Bbasic.entitlement%2Bbasic.persona%26release_type%3Dprod%26response_type%3Dtoken%26redirect_uri%3Dhttps%253A%252F%252Fwww.ea.com%252Fea-sports-fc%252Fultimate-team%252Fweb-app%252Fauth.html%26accessToken%3D%26locale%3Den_US%26prompt%3Dlogin%26client_id%3DFC24_JS_WEB_APP">reset your password</Link>.
+                      </div>
+                    }
                   </FormItem>
                 )}
               />
-                <RadioGroup>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="none" />
-                      </FormControl>
-                      <FormLabel className="text-sm font-normal">Remember me</FormLabel>
-                  </FormItem>
-                </RadioGroup>
-              <Button type="submit" className="w-full text-lg p-5 bg-blue-600">
+
+
+              <span className='flex flex-row gap-4 otkcheckbox checkbox-login-first'>
+                <input type="checkbox" id="rememberMe" name="rememberMe" className='w-6 h-6 bg-[#141724] rounded-sm accent-blue-500 ring-0 focus:ring-0' />
+                <span className='text-white'>
+                  Remember me
+                </span>
+              </span>
+
+              <Button type="submit" className="otkbtn otkbtn-primary fontElectronics mt-4 font-semibold">
                 SIGN IN
               </Button>
             </form>
+
           </Form>
         </div>
-        
+
+        <div className='flex flex-col justify-center items-center'>
+          <Link className='text-[#5288fd] hover:underline font-extralight' href="https://signin.ea.com/p/juno/resetPassword?fid=RlMwOjMuMDoyLjA6d0xYZVFFVzRMUERYWnExaWg2NGQ2WFVCOnF2cWE0&initref=https%3A%2F%2Faccounts.ea.com%3A443%2Fconnect%2Fauth%3Fhide_create%3Dtrue%26display%3Dweb2%252Flogin%26scope%3Dbasic.identity%2Boffline%2Bsignin%2Bbasic.entitlement%2Bbasic.persona%26release_type%3Dprod%26response_type%3Dtoken%26redirect_uri%3Dhttps%253A%252F%252Fwww.ea.com%252Fea-sports-fc%252Fultimate-team%252Fweb-app%252Fauth.html%26accessToken%3D%26locale%3Den_US%26prompt%3Dlogin%26client_id%3DFC24_JS_WEB_APP">Forgot your password?</Link>
+        </div>
+
       </div>
     </div>
   )
