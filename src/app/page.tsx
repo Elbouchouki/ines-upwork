@@ -1,9 +1,6 @@
 "use client"
 
 import Link from "next/link";
-
-import { CreatePost } from "@/app/_components/create-post";
-import { api } from "@/trpc/server";
 import Navbar from "@/components/navbar";
 import StartLoader from "@/components/start-loader";
 import Image from "next/image";
