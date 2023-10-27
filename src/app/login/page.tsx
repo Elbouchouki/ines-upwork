@@ -2,7 +2,6 @@
 import React from 'react'
 import Image from 'next/image';
 import "@/styles/login.css";
-import Icon from '@/components/login/Icon';
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useForm } from 'react-hook-form';
@@ -10,12 +9,11 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { PasswordInput } from '@/components/ui/password-input';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { login } from '@/api/ea';
 
 const formSchema = z.object({
   email: z.string({
@@ -26,25 +24,43 @@ const formSchema = z.object({
 
 const LoginPage = () => {
 
+  const [loading, setLoading] = React.useState(false)
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // mode: "onBlur",
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true)
     const password = form.getValues("password")
     if (!password || password === "") {
       form.setError("password", {
         type: "manual",
         message: "Password is required"
       })
+      setLoading(false)
+
       return
     }
-    console.log(values)
+
+    const y = await login(values.email, password)
+
+    if (!y.ok) {
+      form.setError("password", {
+        type: "manual",
+        message: "Password is required"
+      })
+      setLoading(false)
+
+      return
+    }
+
     router.push(`/login/2fa?email=${values.email}`)
+    setLoading(false)
+
   }
-
-
 
   const router = useRouter()
 
@@ -110,7 +126,6 @@ const LoginPage = () => {
                 )}
               />
 
-
               <span className='flex flex-row gap-4 otkcheckbox checkbox-login-first'>
                 <input type="checkbox" id="rememberMe" name="rememberMe" className='w-6 h-6 bg-[#141724] rounded-sm accent-blue-500 ring-0 focus:ring-0' />
                 <span className='text-white'>
@@ -118,11 +133,12 @@ const LoginPage = () => {
                 </span>
               </span>
 
-              <Button type="submit" className="otkbtn otkbtn-primary fontElectronics mt-4 font-semibold">
+              <Button
+                disabled={loading}
+                type="submit" className="otkbtn otkbtn-primary fontElectronics mt-4 font-semibold">
                 SIGN IN
               </Button>
             </form>
-
           </Form>
         </div>
 

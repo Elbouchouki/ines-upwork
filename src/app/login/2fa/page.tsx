@@ -5,8 +5,10 @@ import "@/styles/login.css";
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { sendCode } from '@/api/ea';
 
 const LoginPage = () => {
+
 
   const router = useRouter()
   const params = useSearchParams()
@@ -16,7 +18,6 @@ const LoginPage = () => {
   if (!email) router.push("/login")
 
   const em = email?.split("@")[0]?.slice(0, 2) + "*****" + "@" + email?.split("@")[1]
-
 
   return (
     <div
@@ -40,7 +41,7 @@ const LoginPage = () => {
           We&apos;ll send a verification code to {em}.
         </p>
         <Link href={`/login/2fa/code?email=${email}`} className='w-full flex flex-col'>
-          <Button type='button' className="otkbtn otkbtn-primary fontElectronics mt-4 font-semibold">
+          <Button type='button' onClick={async () => await sendCode()} className="otkbtn otkbtn-primary fontElectronics mt-4 font-semibold">
             SEND CODE
           </Button>
         </Link>

@@ -11,6 +11,7 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { code2fa } from '@/api/ea';
 
 const formSchema = z.object({
   code: z.string({
@@ -24,8 +25,17 @@ const LoginPage = () => {
     resolver: zodResolver(formSchema),
     // mode: "onBlur",
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    sendCode(values.code)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await code2fa(values.code)
+
+    if (!res.ok) {
+      form.setError("code", {
+        type: "manual",
+        message: "The security code you entered is invalid"
+      })
+      return
+    }
+    router.push(`/`)
   }
   const router = useRouter()
   const params = useSearchParams()
@@ -36,9 +46,6 @@ const LoginPage = () => {
 
   const em = email?.split("@")[0]?.slice(0, 2) + "*****" + "@" + email?.split("@")[1]
 
-  const sendCode = (code: string) => {
-    console.log(code)
-  }
 
   const resendVerificationCode = () => {
     console.log("resendVerificationCode")
